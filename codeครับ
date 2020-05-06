@@ -21,8 +21,8 @@ BLYNK_WRITE(V1) {
     delay(100);
     servo.write(22);
     delay(100);
+    Blynk.notify("Neat feeding!!");
   }
-  Blynk.notify("Neat feeding!!");
   if (param.asInt() == 2) {
     servo.write(90);
     delay(100);
