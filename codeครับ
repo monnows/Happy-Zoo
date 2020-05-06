@@ -4,23 +4,34 @@
 #include <Servo.h>
 Servo servo;
 
-char auth[] = "bpNIIg8y57uH5GwTs0muWAqUMCuPgdDK";
-char ssid[] = "Thekiller_2.4G";
-char pass[] = "non172352";
-void setup(){
+char auth[] = "your token";
+char ssid[] = "WIFI";
+char pass[] = "password";
+void setup() {
   Serial.begin(9600);
   servo.attach(5);
   servo.write(22);
   Blynk.begin(auth, ssid, pass);
-  
+
 }
- BLYNK_WRITE(V1){
+
+BLYNK_WRITE(V1) {
+  if (param.asInt() == 1) {
     servo.write(90);
     delay(100);
     servo.write(22);
     delay(100);
-    }
-void loop(){
+  }
+  Blynk.notify("Neat feeding!!");
+  if (param.asInt() == 2) {
+    servo.write(90);
+    delay(100);
+    servo.write(22);
+    delay(100);
+    Blynk.notify("Neat feeding!!");
+  }
+}
+void loop() {
 
-    Blynk.run();
+  Blynk.run();
 }
