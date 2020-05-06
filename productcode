@@ -1,26 +1,36 @@
 #define BLYNK_PRINT Serial    // Comment this out to disable prints and save space
 #include <ESP8266WiFi.h>
-#include <BlynkSimpleEsp8266.h>                            ### include Blynk เพื่อที่จะสามารถให้productใช้ร่วมกับ app Blynk ได้ ###
-#include <Servo.h>                                         ### การทำงานหลักอยู่ที่ servo จึงต้อง include เข้ามา ###
+#include <BlynkSimpleEsp8266.h>                           // include Blynk เพื่อที่จะสามารถให้productใช้ร่วมกับ app Blynk ได้ //
+#include <Servo.h>                                        // การทำงานหลักอยู่ที่ servo จึงต้อง include เข้ามา //
 Servo servo;
 
-char auth[] = "KEYBlynk";                                  ### key เพื่อเชื่อมต่อกับ app Blynk ###
-char ssid[] = "WiFiname";                                  ### ชื่อ WiFi ###
-char pass[] = "WiFipassword";                              ### รหัส WiFi ###
+char auth[] = "KEYBlynk";                                 // key เพื่อเชื่อมต่อกับ app Blynk //
+char ssid[] = "WiFiname";                                 // ชื่อ WiFi //
+char pass[] = "WiFipassword";                             // รหัส WiFi //
 void setup(){
   Serial.begin(9600);
-  servo.attach(5);                                         ### การตั้งค่าเบื้องต้นของ Servo ###
+  servo.attach(5);                                        // การตั้งค่าเบื้องต้นของ Servo //
   servo.write(22);                                         
   Blynk.begin(auth, ssid, pass);
   
 }
- BLYNK_WRITE(V1){                                          ### การเเสดงผลของ Servo ที่เชื่อมต่อเข้ากับ app Blynk ###
+ BLYNK_WRITE(V1){                                         // ฟังก์ชันสำหรับกดปุ่มให้อาหารได้เลยทันที //
+  if (param.asInt() == 1) {
     servo.write(90);                                        
+    delay(100);                                           // องศาของ Servo เพื่อที่จะเปิดเเละปิดท่อให้ส่งอาหาร //
+    servo.write(22);                                      
     delay(100);
-    servo.write(22);                                       ### องศาของ Servo เพื่อที่จะเปิดเเละปิดท่อให้ส่งอาหาร ###
+  }
+ Blynk.notify("Neat feeding!!");                          // ฟังก์ชันหรับให้อาหารสัตว์ทุก 12.00น. เเละทุกวัน //
+  if (param.asInt() == 2) {
+    servo.write(90);
     delay(100);
-    }
+    servo.write(22);                                      // องศาของ Servo เพื่อที่จะเปิดเเละปิดท่อให้ส่งอาหาร //
+    delay(100);
+    Blynk.notify("Neat feeding!!");
+  }
+}
 void loop(){
 
-    Blynk.run();
+   Blynk.run();
 }
